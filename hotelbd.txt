@@ -1,0 +1,64 @@
+
+
+-- Criação da tabela Hospede
+CREATE TABLE Hospede (
+    Id_Hospede SERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF CHAR(11) NOT NULL UNIQUE,
+    Data_Nascimento DATE NOT NULL,
+    Telefone CHAR(11),
+    Email VARCHAR(100),
+    Endereco VARCHAR(255)
+);
+
+-- Criação da tabela Funcionario
+CREATE TABLE Funcionario (
+    Id_Funcionario SERIAL  PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Data_Nascimento DATE NOT NULL,
+    Cargo VARCHAR(50) NOT NULL,
+    Salario DECIMAL(10, 2) NOT NULL,
+    Turno VARCHAR(50) NOT NULL
+);
+
+-- Criação da tabela Quarto
+CREATE TABLE Quarto (
+    Id_Quarto SERIAL PRIMARY KEY,
+    Numero INT NOT NULL,
+    Tipo VARCHAR(50) NOT NULL,
+    Andar INT NOT NULL,
+    Ocupacao_Maxima INT NOT NULL
+);
+
+-- Criação da tabela Forma_Pagamento
+CREATE TABLE Forma_Pagamento (
+    Id_Pagamento SERIAL PRIMARY KEY,
+    Metodo_Pagamento VARCHAR(50) NOT NULL
+);
+
+-- Criação da tabela Reserva
+CREATE TABLE Reserva (
+    Id_Reserva SERIAL PRIMARY KEY,
+    Numero INT NOT NULL,
+    Check_in DATE NOT NULL,
+    Check_out DATE NOT NULL,
+    Data_Reserva DATE NOT NULL,
+    Numero_Hospedes INT NOT NULL,
+    Status_Pagamento VARCHAR(50) NOT NULL,
+    Valor DECIMAL(10, 2) NOT NULL,
+    Id_Hospede INT NOT NULL,
+    Id_Pagamento INT NOT NULL,
+    Id_Funcionario INT NOT NULL,
+    FOREIGN KEY (Id_Hospede) REFERENCES Hospede(Id_Hospede),
+    FOREIGN KEY (Id_Pagamento) REFERENCES Forma_Pagamento(Id_Pagamento),
+    FOREIGN KEY (Id_Funcionario) REFERENCES Funcionario(Id_Funcionario)
+);
+
+-- Criação da tabela Reserva_Quarto para representar a relação n-n entre Reserva e Quarto
+CREATE TABLE Reserva_Quarto (
+    Id_Reserva SERIAL NOT NULL,
+    Id_Quarto SERIAL NOT NULL,
+    PRIMARY KEY (Id_Reserva, Id_Quarto),
+    FOREIGN KEY (Id_Reserva) REFERENCES Reserva(Id_Reserva),
+    FOREIGN KEY (Id_Quarto) REFERENCES Quarto(Id_Quarto)
+);
